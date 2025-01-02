@@ -1,37 +1,23 @@
 const express = require("express");
-const multer = require('multer');
+const { fetchUser } = require("../services/reportAR.service");
 
-// Use memory storage to handle the file as a buffer
-const storage = multer.memoryStorage();
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
-});
 const reportRouter = express.Router();
-const uploadFile = (req, res) => {
+
+reportRouter.post('/reports-user',async (req,res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
-
-    const uploadedFile = req.file;
-
-    // Set headers for downloading the file
-    res.set({
-      "Content-Type": uploadedFile.mimetype,
-      "Content-Disposition": `attachment; filename="${uploadedFile.originalname}"`,
-    });
-
-    // Send the file buffer
-    res.send(uploadedFile.buffer);
+    const { body } = req;
+    const results = await fetchUser(body)
+    if(results.status != "success") throw new Error(results.error);
+    return res.status(200).json({
+      message:results.message,
+      data:results.data
+    })
   } catch (error) {
-    res.status(500).json({
-      message: "An error occurred",
-      error: error.message,
-    });
+   return res.status(500).json({
+    message:"error occured",
+    error:error.message
+   }) 
   }
-};
-
-reportRouter.post("/upload", upload.single('file'), uploadFile);
+})
 
 module.exports = reportRouter;

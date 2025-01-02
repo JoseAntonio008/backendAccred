@@ -21,10 +21,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      filePath: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
+      
       mimeType: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -38,6 +35,15 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.BLOB("long"),
         allowNull: true, // Use this only if you want to store the file directly
       },
+      description:DataTypes.STRING,
+      status:{
+        type:DataTypes.STRING,
+        defaultValue:"pending"
+      },
+      department:{
+        type:DataTypes.STRING,
+        allowNull:false
+      }
     },
     {
       sequelize,
