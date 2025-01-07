@@ -1,14 +1,18 @@
 const { ReportAr, Notifications } = require("../models");
 const { Op, where } = require("sequelize");
 
-const fetchAdmin = async ({}) => {
+const fetchAdmin = async () => {
   try {
     const results = await ReportAr.findAll({
+      where: {
+        status: "pending",
+      },
       attributes: { exclude: ["fileData"] },
     });
     if (results.length == 0) {
       return {
         message: "no reports found",
+        data: "no reports found",
       };
     }
     return {

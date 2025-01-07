@@ -4,6 +4,7 @@ const {
   processReportApproved,
   processReportRejected,
   viewPdf,
+  fetchAdmin,
 } = require("../services/reportAR.service");
 
 const reportRouter = express.Router();
@@ -20,6 +21,21 @@ reportRouter.post("/reports-user", async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       message: "error occured",
+      error: error.message,
+    });
+  }
+});
+reportRouter.get("/adminAR", async (req, res) => {
+  try {
+    const result = await fetchAdmin();
+    if (result.message == "error occured") throw new Error(result.error);
+    return res.status(200).json({
+      message: "AR for admin",
+      data: result.data,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "error occurred",
       error: error.message,
     });
   }
