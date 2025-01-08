@@ -8,6 +8,7 @@ const reportRouter = require("./controllers/reportAr.controller");
 const bodyParser = require("body-parser");
 const multer = require("multer");
 const notifRouter = require("./controllers/notification.controller");
+const announceRouter = require("./controllers/announcement.controller");
 
 // Configure Multer for memory storage
 const storage = multer.memoryStorage();
@@ -32,6 +33,7 @@ app.use("/api/user", userRoute);
 app.use("/api/event", eventRouter);
 app.use("/api/AR", reportRouter);
 app.use("/api/notif", notifRouter);
+app.use("/api/announcement", announceRouter);
 
 app.post("/upload", upload.single("file"), async (req, res) => {
   try {

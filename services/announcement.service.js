@@ -1,14 +1,10 @@
 const { Op, where } = require("sequelize");
 const { Announcement } = require("../models");
 
-const fetchAnnouncement = async ({ department }) => {
+const adminAnnouncement = async () => {
   try {
-    const getNotif = await Announcement.findAll({
-      where: {
-        department: { [Op.in]: department },
-      },
-    });
-    if (getNotif.length === 0) {
+    const getAnnouncement = await Announcement.findAll();
+    if (getAnnouncement.length === 0) {
       return {
         message: "no Announcement Available",
         data: "no Announcement available",
@@ -16,7 +12,7 @@ const fetchAnnouncement = async ({ department }) => {
     }
     return {
       message: "success retrieving of Announcement",
-      data: getNotif,
+      data: getAnnouncement,
     };
   } catch (error) {
     return {
@@ -26,16 +22,41 @@ const fetchAnnouncement = async ({ department }) => {
   }
 };
 
-const createNotif = async ({ title, description, department }) => {
+const fetchAnnouncement = async ({ department }) => {
   try {
-    const createNotification = await Announcement.create({
+    const getAnnouncement = await Announcement.findAll({
+      where: {
+        department: { [Op.in]: department },
+      },
+    });
+    if (getAnnouncement.length === 0) {
+      return {
+        message: "no Announcement Available",
+        data: "no Announcement available",
+      };
+    }
+    return {
+      message: "success retrieving of Announcement",
+      data: getAnnouncement,
+    };
+  } catch (error) {
+    return {
+      message: "error occurred",
+      error: error.message,
+    };
+  }
+};
+
+const createAnnouncement = async ({ title, description, department }) => {
+  try {
+    const createAnnouncement = await Announcement.create({
       title,
       description,
       department,
     });
     return {
       message: "success creation",
-      data: createNotification,
+      data: createAnnouncement,
     };
   } catch (error) {
     return {
@@ -45,23 +66,23 @@ const createNotif = async ({ title, description, department }) => {
   }
 };
 
-const deleteNotif = async ({ id }) => {
+const deleteAnnouncement = async ({ id }) => {
   try {
     const checkExist = await Announcement.findOne({
       where: {
         id,
       },
     });
-    if (!checkExist) throw new Error("no notif id found");
+    if (!checkExist) throw new Error("no Announcement id found");
 
-    const deleteNotif = await Announcement.destroy({
+    const deleteAnnouncement = await Announcement.destroy({
       where: {
         id: id,
       },
     });
     return {
-      message: "notif successfully deleted",
-      data: deleteNotif,
+      message: "Announcement successfully deleted",
+      data: deleteAnnouncement,
     };
   } catch (error) {
     return {
@@ -70,7 +91,7 @@ const deleteNotif = async ({ id }) => {
     };
   }
 };
-const updateNotif = async ({ id, title, description, department }) => {
+const updateAnnouncement = async ({ id, title, description, department }) => {
   try {
     const checkExist = await Announcement.findByPk(id);
     if (!checkExist) throw new Error("no id found");
@@ -98,8 +119,9 @@ const updateNotif = async ({ id, title, description, department }) => {
   }
 };
 module.exports = {
-  fetchNotifications,
-  deleteNotif,
-  createNotif,
-  updateNotif,
+  adminAnnouncement,
+  fetchAnnouncement,
+  deleteAnnouncement,
+  createAnnouncement,
+  updateAnnouncement,
 };
