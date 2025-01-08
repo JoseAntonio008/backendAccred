@@ -4,9 +4,9 @@ const { Op, where } = require("sequelize");
 const fetchAdmin = async () => {
   try {
     const results = await ReportAr.findAll({
-      where: {
-        status: "pending",
-      },
+      // where: {
+      //   status: "pending",
+      // },
       attributes: { exclude: ["fileData"] },
     });
     if (results.length == 0) {

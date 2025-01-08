@@ -100,10 +100,10 @@ reportRouter.post("/viewPdf", async (req, res) => {
       data: results.data,
     });
   } catch (error) {
-    return {
+    return res.status(500).json({
       message: "error occured",
       error: error.message,
-    };
+    });
   }
 });
 
