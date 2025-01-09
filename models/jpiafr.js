@@ -17,7 +17,12 @@ module.exports = (sequelize, DataTypes) => {
       fileName: { type: DataTypes.STRING, allowNull: false },
       mimeType: { type: DataTypes.STRING, allowNull: false },
       size: { type: DataTypes.INTEGER, allowNull: false },
-      fileDate: DataTypes.BLOB("long"),
+      fileData: DataTypes.BLOB("long"),
+      status:{
+        defaultValue:"pending",
+        type:DataTypes.STRING
+      },
+      department:{type:DataTypes.STRING, allowNull:false}
     },
     {
       sequelize,

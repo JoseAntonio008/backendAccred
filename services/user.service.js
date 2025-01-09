@@ -11,6 +11,7 @@ const createAccount = async ({
   yearlvl,
   password,
   email,
+  role
   // token,
 }) => {
   try {
@@ -30,6 +31,7 @@ const createAccount = async ({
       yearlvl,
       password: hashedPass,
       email,
+      role
       // token,
     });
 
@@ -93,8 +95,33 @@ const login = async ({ email, password }) => {
     }
   }
 };
+const fetchAccounts = async () => {
+  try {
+    const result = await Users.findAll({
+      attributes: { exclude: ["password","createdAt","updatedAt","token"] },
+    })
+  if(result.length==0){
+    return {
+      message:"success fetch",
+      data:"empty"
+    }
+  }
+  return {
+    message:"success fetch",
+    data:result
+  }
+    
+  } catch (error) {
+    return {
+      message:"error occurred",
+      error:error.message
+    }
+  }
+  
+}
 
 module.exports = {
   createAccount,
   login,
+  fetchAccounts
 };
