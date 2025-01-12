@@ -1,4 +1,4 @@
-const { createAccount, login, fetchAccounts } = require("../services/user.service");
+const { createAccount, login, fetchAccounts, udpateAccount } = require("../services/user.service");
 const express = require("express");
 const userRoute = express.Router();
 
@@ -44,6 +44,23 @@ userRoute.get('/fetchAccounts',async (req,res) => {
   } catch (error) {
     return res.status(500).json({
       message:"error occurred",
+      error:error.message
+    })
+  }
+})
+userRoute.post('/updateAccount',async (req,res) => {
+  try {
+    const {body}=req
+    const result = await udpateAccount(body)
+    if(result.message=="an Error occurred") throw new Error(result.message);
+    return res.json(200).json({
+      message:"Account updated Successfully"
+    })
+  } catch (error) {
+    console.log(error);
+    
+    return res.status(500).json({
+      message:"an Error occurred",
       error:error.message
     })
   }

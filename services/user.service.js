@@ -120,8 +120,49 @@ const fetchAccounts = async () => {
   
 }
 
+const udpateAccount = async ({
+  id,
+  fname,
+        mname,
+        lname,
+        section,
+        yearlvl,
+        email,
+        department
+}) => {
+  try {
+    const checkExist = await Users.findByPk(id)
+    if(!checkExist)throw new Error("no id found");
+    
+    const toUpdate = await Users.update(
+      {
+        fname,
+        mname,
+        lname,
+        section,
+        yearlvl,
+        email,
+        department
+
+      },{
+        where:{
+          id:checkExist.id
+        }
+      }
+    )
+    return {
+      message:"updated Account Successfully"
+    }
+  } catch (error) {
+    return {
+      message:"an Error occurred",
+      error:error.message
+    }
+  }
+}
 module.exports = {
   createAccount,
   login,
-  fetchAccounts
+  fetchAccounts,
+  udpateAccount
 };
