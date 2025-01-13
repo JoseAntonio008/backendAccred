@@ -4,9 +4,13 @@ const {
   fetchAccounts,
   udpateAccount,
   deleteAccount,
+  checkTokenAdmin,
 } = require("../services/user.service");
 const express = require("express");
 const userRoute = express.Router();
+require("dotenv").config();
+
+const SECRET_KEY = process.env.SECRET_KEY;
 
 userRoute.post("/signUp", async (req, res) => {
   const { body } = req;
@@ -86,6 +90,25 @@ userRoute.delete("/delete-account", async (req, res) => {
     });
   }
 });
+userRoute.post('/adminToken',async (req,res) => {
+  try {
+    const { body } = req 
+    const result = await checkTokenAdmin(body)
+    
+    
+    if(result.message !="valid token")throw new Error(result.error);
+    return res.status(200).json({
+      message:result.message,
+      role:result.role
+    })
+    
+  } catch (error) {
+    return res.status(200).json({
+      message:"error occurred",
+      error:error.message
+    })
+  }
+})
 module.exports = {
   userRoute,
 };

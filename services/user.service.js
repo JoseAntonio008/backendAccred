@@ -1,7 +1,10 @@
 const { where } = require("sequelize");
-const { hashPassword, signToken } = require("../helpers/user.utils");
+const { hashPassword, signToken, verifyToken } = require("../helpers/user.utils");
 const { sequelize, Users } = require("../models");
 const { compare } = require("bcrypt");
+require("dotenv").config();
+
+const SECRET_KEY = process.env.SECRET_KEY;
 
 const createAccount = async ({
   fname,
@@ -180,10 +183,32 @@ const deleteAccount = async ({ id }) => {
     };
   }
 };
+const checkTokenAdmin = async ({token}) => {
+  try {
+    const decoded = verifyToken(token,SECRET_KEY);
+    if(!decoded)throw new Error("invalid Token");
+    
+    const checkToken = await Users.findByPk(decoded.userId)
+    if(!checkToken)throw new Error("no user found with this id");
+    // if(decoded.role != "admin") throw new Error("credential does not match");
+
+    return {
+      message:"valid token",
+      role:decoded.role
+    }
+    
+  } catch (error) {
+    return {
+      message:"error occurred",
+      error:error.message
+    }
+  }
+}
 module.exports = {
   createAccount,
   login,
   fetchAccounts,
   udpateAccount,
   deleteAccount,
+  checkTokenAdmin
 };

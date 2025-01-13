@@ -30,7 +30,7 @@ jpiaRouter.get("/adminFR", async (req, res) => {
     const result = await fetchAdmin();
     if (result.message == "error occured") throw new Error(result.error);
     return res.status(200).json({
-      message: "AR for admin",
+      message: "Financial Report for admin",
       data: result.data,
     });
   } catch (error) {
