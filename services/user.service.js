@@ -11,7 +11,7 @@ const createAccount = async ({
   yearlvl,
   password,
   email,
-  role
+  role,
   // token,
 }) => {
   try {
@@ -31,7 +31,7 @@ const createAccount = async ({
       yearlvl,
       password: hashedPass,
       email,
-      role
+      role,
       // token,
     });
 
@@ -68,72 +68,73 @@ const login = async ({ email, password }) => {
       "9h"
     );
 
-    await Users.update({
-      token: createToken,
-    },{
-      where:{
-        email:userEmail.email
+    await Users.update(
+      {
+        token: createToken,
+      },
+      {
+        where: {
+          email: userEmail.email,
+        },
       }
-    });
+    );
     return {
       message: "Success login",
       data: {
-        id:userEmail.id,
-        fname:userEmail.fname,
-        mname:userEmail.mname,
-        lname:userEmail.lname,
-        section:userEmail.section,
-        yearlvl:userEmail.yearlvl,
-        email:userEmail.email,
-        token:createToken,
-        role:userEmail.role
-      }
+        id: userEmail.id,
+        fname: userEmail.fname,
+        mname: userEmail.mname,
+        lname: userEmail.lname,
+        section: userEmail.section,
+        yearlvl: userEmail.yearlvl,
+        email: userEmail.email,
+        token: createToken,
+        role: userEmail.role,
+      },
     };
   } catch (error) {
     return {
-      message:error.message
-    }
+      message: error.message,
+    };
   }
 };
 const fetchAccounts = async () => {
   try {
     const result = await Users.findAll({
-      attributes: { exclude: ["password","createdAt","updatedAt","token"] },
-    })
-  if(result.length==0){
-    return {
-      message:"success fetch",
-      data:"empty"
+      attributes: { exclude: ["password", "createdAt", "updatedAt", "token"] },
+    });
+    if (result.length == 0) {
+      return {
+        message: "success fetch",
+        data: "empty",
+      };
     }
-  }
-  return {
-    message:"success fetch",
-    data:result
-  }
-    
+    return {
+      message: "success fetch",
+      data: result,
+    };
   } catch (error) {
     return {
-      message:"error occurred",
-      error:error.message
-    }
+      message: "error occurred",
+      error: error.message,
+    };
   }
-  
-}
+};
 
 const udpateAccount = async ({
   id,
   fname,
-        mname,
-        lname,
-        section,
-        yearlvl,
-        email,
-        department
+  mname,
+  lname,
+  section,
+  yearlvl,
+  email,
+  department,
 }) => {
   try {
-    const checkExist = await Users.findByPk(id)
-    if(!checkExist)throw new Error("no id found");
-    
+    const checkExist = await Users.findByPk(id);
+    if (!checkExist) throw new Error("no id found");
+
     const toUpdate = await Users.update(
       {
         fname,
@@ -142,27 +143,47 @@ const udpateAccount = async ({
         section,
         yearlvl,
         email,
-        department
-
-      },{
-        where:{
-          id:checkExist.id
-        }
+        department,
+      },
+      {
+        where: {
+          id: checkExist.id,
+        },
       }
-    )
+    );
     return {
-      message:"updated Account Successfully"
-    }
+      message: "updated Account Successfully",
+    };
   } catch (error) {
     return {
-      message:"an Error occurred",
-      error:error.message
-    }
+      message: "an Error occurred",
+      error: error.message,
+    };
   }
-}
+};
+const deleteAccount = async ({ id }) => {
+  try {
+    const checkExist = await Users.findByPk(id);
+    if (!checkExist) throw new Error("no id found");
+    const toDelete = await Users.destroy({
+      where: {
+        id: checkExist.id,
+      },
+    });
+    return {
+      message: "deleted successfully",
+    };
+  } catch (error) {
+    return {
+      message: "error occurred",
+      error: error.message,
+    };
+  }
+};
 module.exports = {
   createAccount,
   login,
   fetchAccounts,
-  udpateAccount
+  udpateAccount,
+  deleteAccount,
 };
