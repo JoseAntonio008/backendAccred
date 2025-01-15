@@ -129,10 +129,186 @@ const viewPdf = async ({ id }) => {
     };
   }
 };
+const arChartsCCST = async () => {
+  try {
+    const ccstCharts = await ReportAr.findAndCountAll({
+      where:{
+        department:"CCST",
+        status:"approved"
+      }
+    })
+    const score = ccstCharts.count * 5
+    console.log(score);
+    return {
+      message:`CCST raw count ${ccstCharts}`,
+      data:score
+    }
+  } catch (error) {
+    return {
+      message:"error occurred",
+      error:error.message
+    }
+  }
+}
+const arChartsCTHM = async () => {
+  try {
+    const CTHMCharts = await ReportAr.findAndCountAll({
+      where:{
+        department:"CTHM",
+        status:"approved"
+      }
+    })
+    const score = CTHMCharts.count * 5
+    console.log(score);
+    return {
+      message:`CTHM raw count ${CTHMCharts}`,
+      data:score
+    }
+  } catch (error) {
+    return {
+      message:"error occurred",
+      error:error.message
+    }
+  }
+}
+const arChartsCTED = async () => {
+  try {
+    const CTEDCharts = await ReportAr.findAndCountAll({
+      where:{
+        department:"CTED",
+        status:"approved"
+      }
+    })
+    const score = CTEDCharts.count * 5
+    console.log(score);
+    return {
+      message:`CTED raw count ${CTEDCharts}`,
+      data:score
+    }
+  } catch (error) {
+    return {
+      message:"error occurred",
+      error:error.message
+    }
+  }
+}
+const arChartsCAS = async () => {
+  try {
+    const CASCharts = await ReportAr.findAndCountAll({
+      where:{
+        department:"CAS",
+        status:"approved"
+      }
+    })
+    const score = CASCharts.count * 5
+    console.log(score);
+    return {
+      message:`CAS raw count ${CASCharts}`,
+      data:score
+    }
+  } catch (error) {
+    return {
+      message:"error occurred",
+      error:error.message
+    }
+  }
+}
+const arChartsCHK = async () => {
+  try {
+    const CHKCharts = await ReportAr.findAndCountAll({
+      where:{
+        department:"CHK",
+        status:"approved"
+      }
+    })
+    const score = CHKCharts.count * 5
+    console.log(score);
+    return {
+      message:`CHK raw count ${CHKCharts}`,
+      data:score
+    }
+  } catch (error) {
+    return {
+      message:"error occurred",
+      error:error.message
+    }
+  }
+}
+const arChartsCOE = async () => {
+  try {
+    const COECharts = await ReportAr.findAndCountAll({
+      where:{
+        department:"COE",
+        status:"approved"
+      }
+    })
+    const score = COECharts.count * 5
+    console.log(score);
+    return {
+      message:`COE raw count ${COECharts}`,
+      data:score
+    }
+  } catch (error) {
+    return {
+      message:"error occurred",
+      error:error.message
+    }
+  }
+}
+const arChartsCOA = async () => {
+  try {
+    const COACharts = await ReportAr.findAndCountAll({
+      where:{
+        department:"COA",
+        status:"approved"
+      }
+    })
+    const score = COACharts.count * 5
+    console.log(score);
+    return {
+      message:`COA raw count ${COACharts}`,
+      data:score
+    }
+  } catch (error) {
+    return {
+      message:"error occurred",
+      error:error.message
+    }
+  }
+}
+const arChartsCNHS = async () => {
+  try {
+    const CNHSCharts = await ReportAr.findAndCountAll({
+      where:{
+        department:"CNHS",
+        status:"approved"
+      }
+    })
+    const score = CNHSCharts.count * 5
+    console.log(score);
+    return {
+      message:`CNHS raw count ${CNHSCharts}`,
+      data:score
+    }
+  } catch (error) {
+    return {
+      message:"error occurred",
+      error:error.message
+    }
+  }
+}
 module.exports = {
   fetchAdmin,
   fetchUser,
   processReportApproved,
   processReportRejected,
   viewPdf,
+  arChartsCCST,
+  arChartsCAS,
+  arChartsCHK,
+  arChartsCNHS,
+  arChartsCOA,
+  arChartsCOE,
+  arChartsCTED,
+  arChartsCTHM
 };

@@ -5,6 +5,14 @@ const {
   processReportRejected,
   viewPdf,
   fetchAdmin,
+  frChartsCTHM,
+  frChartsCCST,
+  frChartsCTED,
+  frChartsCAS,
+  frChartsCHK,
+  frChartsCOE,
+  frChartsCOA,
+  frChartsCNHS,
 } = require('../services/jpiafr.service');
 
 const jpiaRouter = express.Router();
@@ -106,5 +114,27 @@ jpiaRouter.post("/viewPdf", async (req, res) => {
     });
   }
 });
+jpiaRouter.get("/chart-fr",async (req,res) => {
+  try {
+    const cthm = await frChartsCTHM();
+    const ccst = await frChartsCCST()
+    const cted = await frChartsCTED();
+    const cas = await frChartsCAS();
+    const chk = await frChartsCHK();
+    const coe = await frChartsCOE();
+    const coa = await frChartsCOA();
+    const cnhs = await frChartsCNHS()
+    
+    return res.status(200).json({
+      message:"AR reports",
+      data:[cthm.data,ccst.data,cted.data,cas.data,chk.data,coe.data,coa.data,cnhs.data]
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message:"an error occurred",
+      error:error.message
+    })
+  }
+})
 
 module.exports = jpiaRouter;

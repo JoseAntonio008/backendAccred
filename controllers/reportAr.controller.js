@@ -5,6 +5,14 @@ const {
   processReportRejected,
   viewPdf,
   fetchAdmin,
+  arChartsCTHM,
+  arChartsCCST,
+  arChartsCTED,
+  arChartsCAS,
+  arChartsCHK,
+  arChartsCOE,
+  arChartsCOA,
+  arChartsCNHS,
 } = require("../services/reportAR.service");
 
 const reportRouter = express.Router();
@@ -106,5 +114,27 @@ reportRouter.post("/viewPdf", async (req, res) => {
     });
   }
 });
+reportRouter.get("/chart-ar",async (req,res) => {
+  try {
+    const cthm = await arChartsCTHM();
+    const ccst = await arChartsCCST()
+    const cted = await arChartsCTED();
+    const cas = await arChartsCAS();
+    const chk = await arChartsCHK();
+    const coe = await arChartsCOE();
+    const coa = await arChartsCOA();
+    const cnhs = await arChartsCNHS()
+    
+    return res.status(200).json({
+      message:"AR reports",
+      data:[cthm.data,ccst.data,cted.data,cas.data,chk.data,coe.data,coa.data,cnhs.data]
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message:"an error occurred",
+      error:error.message
+    })
+  }
+})
 
 module.exports = reportRouter;
