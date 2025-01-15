@@ -1,5 +1,6 @@
 const { Op, where } = require("sequelize");
 const { Announcement } = require("../models");
+const Sequelize = require('sequelize')
 
 const adminAnnouncement = async () => {
   try {
@@ -24,28 +25,37 @@ const adminAnnouncement = async () => {
 
 const fetchAnnouncement = async ({ department }) => {
   try {
+    // Normalize the input department to lowercase
+    // const normalizedDepartment = department.map(dep => dep.toLowerCase());
+    // console.log(normalizedDepartment);
+    
+    // Fetch announcements where the department array contains the input values (case-insensitive)
     const getAnnouncement = await Announcement.findAll({
-      where: {
-        department: { [Op.in]: department },
-      },
+      where: Sequelize.where(
+        Sequelize.fn('JSON_CONTAINS', Sequelize.col('department'), Sequelize.literal(`'["${department.join('", "')}"]'`)),
+        true
+      ),
     });
+
     if (getAnnouncement.length === 0) {
       return {
-        message: "no Announcement Available",
-        data: "no Announcement available",
+        message: "No Announcement Available",
+        data: "No Announcement available",
       };
     }
+
     return {
-      message: "success retrieving of Announcement",
+      message: "Success retrieving Announcement",
       data: getAnnouncement,
     };
   } catch (error) {
     return {
-      message: "error occurred",
+      message: "Error occurred",
       error: error.message,
     };
   }
 };
+
 
 const createAnnouncement = async ({ title, description, department }) => {
   try {

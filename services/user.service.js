@@ -1,5 +1,9 @@
 const { where } = require("sequelize");
-const { hashPassword, signToken, verifyToken } = require("../helpers/user.utils");
+const {
+  hashPassword,
+  signToken,
+  verifyToken,
+} = require("../helpers/user.utils");
 const { sequelize, Users } = require("../models");
 const { compare } = require("bcrypt");
 require("dotenv").config();
@@ -67,6 +71,7 @@ const login = async ({ email, password }) => {
         userId: userEmail.id,
         userName: `${userEmail.lname}, ${userEmail.fname}`,
         role: userEmail.role,
+        department: userEmail.department,
       },
       "9h"
     );
@@ -93,6 +98,7 @@ const login = async ({ email, password }) => {
         email: userEmail.email,
         token: createToken,
         role: userEmail.role,
+        department: userEmail.department,
       },
     };
   } catch (error) {
@@ -183,23 +189,74 @@ const deleteAccount = async ({ id }) => {
     };
   }
 };
-const checkTokenAdmin = async ({token}) => {
+const checkTokenAdmin = async ({ token }) => {
   try {
-    const decoded = verifyToken(token,SECRET_KEY);
-    if(!decoded)throw new Error("invalid Token");
-    
-    const checkToken = await Users.findByPk(decoded.userId)
-    if(!checkToken)throw new Error("no user found with this id");
+    const decoded = verifyToken(token, SECRET_KEY);
+    if (!decoded) throw new Error("invalid Token");
+
+    const checkToken = await Users.findByPk(decoded.userId);
+    if (!checkToken) throw new Error("no user found with this id");
     // if(decoded.role != "admin") throw new Error("credential does not match");
 
     return {
-      message:"valid token",
-      role:decoded.role
-    }
-    
+      message: "valid token",
+      role: decoded.role,
+      department: decoded.department,
+    };
   } catch (error) {
     return {
-      message:"error occurred",
+      message: "error occurred",
+      error: error.message,
+    };
+  }
+};
+const checkOtp = async ({ code, email }) => {
+  try {
+    const checkEmail = await Users.findOne({
+      where: {
+        email: email,
+      },
+    });
+    if (!checkEmail) throw new Error("email not found");
+    if (checkEmail.code != code) {
+      throw new Error("OTP does not match");
+    }
+    return{
+      message:"code matches"
+    }
+  } catch (error) {
+    return {
+      message:"an error occurred",
+      error:error.message
+    }
+  }
+};
+const changePassword = async ({email,password,code}) => {
+  try {
+    const checkExist = await Users.findOne({
+      where:{
+        email:email
+      }
+    })
+    if(!checkExist)throw new Error("no email found");
+    if(checkExist.code != code) throw new Error("Otp does not match");
+    
+    hashedPass = await hashPassword(password)
+    const updatePass = await Users.update({
+      password:hashedPass,
+      code:" "
+    },{
+      where:{
+        email:email
+      }
+    }
+  )
+    return {
+      message:"password changed successfully",
+    }
+  } catch (error) {
+    return {
+      message:"an Error occurred",
       error:error.message
     }
   }
@@ -210,5 +267,7 @@ module.exports = {
   fetchAccounts,
   udpateAccount,
   deleteAccount,
-  checkTokenAdmin
+  checkTokenAdmin,
+  checkOtp,
+  changePassword
 };

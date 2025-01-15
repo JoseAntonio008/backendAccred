@@ -5,10 +5,13 @@ const {
   udpateAccount,
   deleteAccount,
   checkTokenAdmin,
+  checkOtp,
+  changePassword,
 } = require("../services/user.service");
 const express = require("express");
 const userRoute = express.Router();
 require("dotenv").config();
+const { sendEmail} = require('../services/email.service')
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
@@ -99,7 +102,8 @@ userRoute.post('/adminToken',async (req,res) => {
     if(result.message !="valid token")throw new Error(result.error);
     return res.status(200).json({
       message:result.message,
-      role:result.role
+      role:result.role,
+      department:result.department
     })
     
   } catch (error) {
@@ -107,6 +111,47 @@ userRoute.post('/adminToken',async (req,res) => {
       message:"error occurred",
       error:error.message
     })
+  }
+})
+userRoute.post("/sendOTP", async (req, res) => {
+  const { email } = req.body; // Make sure you're extracting the 'email' field from the body
+  try {
+    const send = await sendEmail(email); // Make sure 'sendEmail' is called with the correct parameter
+    if (send.message !== "otpSent") throw new Error(send.error);
+    return res.status(200).json(send);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+userRoute.post("/checkOtp",async (req,res) => {
+  try {
+    const { body } =req
+    const result = await checkOtp(body)
+    if(result.message != "code matches")throw new Error(result.error);
+    return res.status(200).json({
+      message:result.message
+    })
+    
+  } catch (error) {
+    return res.status(500).json({
+      message:"an error occurred",
+      error:error.message
+    })
+  }
+})
+userRoute.post("/change-password",async (req,res) => {
+  try {
+    const { body} = req
+    const result = await changePassword(body)
+    if(result.message != "password changed successfully") throw new Error(result.error);
+    return res.status(200).json({
+      message:result.message
+    })
+  } catch (error) {
+    return res.status(500).json({
+      message:"an error occurred",
+      error:error.message
+    })    
   }
 })
 module.exports = {

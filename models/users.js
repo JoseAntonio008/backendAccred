@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       token: DataTypes.STRING,
       role: { type: DataTypes.STRING, defaultValue: "student" },
       department: DataTypes.STRING,
+      code:DataTypes.STRING
     },
     {
       sequelize,

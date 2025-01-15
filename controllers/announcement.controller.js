@@ -9,7 +9,7 @@ const {
 } = require("../services/announcement.service");
 const announceRouter = express.Router();
 
-announceRouter.get("/get-announcement", async (req, res) => {
+announceRouter.post("/get-announcement", async (req, res) => {
   try {
     const { body } = req;
     const result = await fetchAnnouncement(body);
