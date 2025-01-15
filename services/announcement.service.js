@@ -5,12 +5,12 @@ const Sequelize = require('sequelize')
 const adminAnnouncement = async () => {
   try {
     const getAnnouncement = await Announcement.findAll();
-    if (getAnnouncement.length === 0) {
-      return {
-        message: "no Announcement Available",
-        data: "no Announcement available",
-      };
-    }
+    // if (getAnnouncement.length === 0) {
+    //   return {
+    //     message: "no Announcement Available",
+    //     data: "no Announcement available",
+    //   };
+    // }
     return {
       message: "success retrieving of Announcement",
       data: getAnnouncement,
@@ -37,12 +37,12 @@ const fetchAnnouncement = async ({ department }) => {
       ),
     });
 
-    if (getAnnouncement.length === 0) {
-      return {
-        message: "No Announcement Available",
-        data: "No Announcement available",
-      };
-    }
+    // if (getAnnouncement.length === 0) {
+    //   return {
+    //     message: "No Announcement Available",
+    //     data: "No Announcement available",
+    //   };
+    // }
 
     return {
       message: "Success retrieving Announcement",
