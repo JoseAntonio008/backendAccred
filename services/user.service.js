@@ -1,4 +1,4 @@
-const { where } = require("sequelize");
+const { Op, where } = require("sequelize");
 const {
   hashPassword,
   signToken,
@@ -18,6 +18,7 @@ const createAccount = async ({
   yearlvl,
   password,
   email,
+  department,
   role,
   // token,
 }) => {
@@ -37,6 +38,7 @@ const createAccount = async ({
       section,
       yearlvl,
       password: hashedPass,
+      department,
       email,
       role,
       // token,
@@ -111,13 +113,20 @@ const fetchAccounts = async () => {
   try {
     const result = await Users.findAll({
       attributes: { exclude: ["password", "createdAt", "updatedAt", "token"] },
+      where: {
+        role: {
+          [Op.ne]: "admin", // Op.ne = "not equal" in Sequelize
+        },
+      },
     });
-    if (result.length == 0) {
+
+    if (result.length === 0) {
       return {
         message: "success fetch",
         data: "empty",
       };
     }
+
     return {
       message: "success fetch",
       data: result,
@@ -221,46 +230,48 @@ const checkOtp = async ({ code, email }) => {
     if (checkEmail.code != code) {
       throw new Error("OTP does not match");
     }
-    return{
-      message:"code matches"
-    }
+    return {
+      message: "code matches",
+    };
   } catch (error) {
     return {
-      message:"an error occurred",
-      error:error.message
-    }
+      message: "an error occurred",
+      error: error.message,
+    };
   }
 };
-const changePassword = async ({email,password,code}) => {
+const changePassword = async ({ email, password, code }) => {
   try {
     const checkExist = await Users.findOne({
-      where:{
-        email:email
+      where: {
+        email: email,
+      },
+    });
+    if (!checkExist) throw new Error("no email found");
+    if (checkExist.code != code) throw new Error("Otp does not match");
+
+    hashedPass = await hashPassword(password);
+    const updatePass = await Users.update(
+      {
+        password: hashedPass,
+        code: " ",
+      },
+      {
+        where: {
+          email: email,
+        },
       }
-    })
-    if(!checkExist)throw new Error("no email found");
-    if(checkExist.code != code) throw new Error("Otp does not match");
-    
-    hashedPass = await hashPassword(password)
-    const updatePass = await Users.update({
-      password:hashedPass,
-      code:" "
-    },{
-      where:{
-        email:email
-      }
-    }
-  )
+    );
     return {
-      message:"password changed successfully",
-    }
+      message: "password changed successfully",
+    };
   } catch (error) {
     return {
-      message:"an Error occurred",
-      error:error.message
-    }
+      message: "an Error occurred",
+      error: error.message,
+    };
   }
-}
+};
 module.exports = {
   createAccount,
   login,
@@ -269,5 +280,5 @@ module.exports = {
   deleteAccount,
   checkTokenAdmin,
   checkOtp,
-  changePassword
+  changePassword,
 };

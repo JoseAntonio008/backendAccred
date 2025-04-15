@@ -63,13 +63,13 @@ const processReportApproved = async ({ id, department }) => {
       { where: { id: find.id } }
     );
     const notify = await Notifications.create({
-      title: `AR: Request for Approval`,
+      title: `Financial Report: Request for Approval`,
       message: `your Request was Approved, Title: ${find.title}`,
       department: department,
     });
 
     return {
-      message: `AR approved title: ${find.title} by ${find.department}`,
+      message: `Financial Report approved title: ${find.title} by ${find.department}`,
       data: toApproved,
       statusMsg: "success",
     };
@@ -99,7 +99,7 @@ const processReportRejected = async ({ id, department }) => {
     });
 
     return {
-      message: `AR Rejected title: ${find.title} by ${find.department}`,
+      message: `Financial Report Rejected title: ${find.title} by ${find.department}`,
       data: toApproved,
       statusMsg: "success",
     };
@@ -132,171 +132,171 @@ const viewPdf = async ({ id }) => {
 const frChartsCCST = async () => {
   try {
     const ccstCharts = await JpiaFr.findAndCountAll({
-      where:{
-        department:"CCST",
-        status:"approved"
-      }
-    })
-    const score = ccstCharts.count * 5
+      where: {
+        department: "CCST",
+        status: "approved",
+      },
+    });
+    const score = ccstCharts.count * 5;
     console.log(score);
     return {
-      message:`CCST raw count ${ccstCharts}`,
-      data:score
-    }
+      message: `CCST raw count ${ccstCharts}`,
+      data: score,
+    };
   } catch (error) {
     return {
-      message:"error occurred",
-      error:error.message
-    }
+      message: "error occurred",
+      error: error.message,
+    };
   }
-}
+};
 const frChartsCTHM = async () => {
   try {
     const CTHMCharts = await JpiaFr.findAndCountAll({
-      where:{
-        department:"CTHM",
-        status:"approved"
-      }
-    })
-    const score = CTHMCharts.count * 5
+      where: {
+        department: "CTHM",
+        status: "approved",
+      },
+    });
+    const score = CTHMCharts.count * 5;
     console.log(score);
     return {
-      message:`CTHM raw count ${CTHMCharts}`,
-      data:score
-    }
+      message: `CTHM raw count ${CTHMCharts}`,
+      data: score,
+    };
   } catch (error) {
     return {
-      message:"error occurred",
-      error:error.message
-    }
+      message: "error occurred",
+      error: error.message,
+    };
   }
-}
+};
 const frChartsCTED = async () => {
   try {
     const CTEDCharts = await JpiaFr.findAndCountAll({
-      where:{
-        department:"CTED",
-        status:"approved"
-      }
-    })
-    const score = CTEDCharts.count * 5
+      where: {
+        department: "CTED",
+        status: "approved",
+      },
+    });
+    const score = CTEDCharts.count * 5;
     console.log(score);
     return {
-      message:`CTED raw count ${CTEDCharts}`,
-      data:score
-    }
+      message: `CTED raw count ${CTEDCharts}`,
+      data: score,
+    };
   } catch (error) {
     return {
-      message:"error occurred",
-      error:error.message
-    }
+      message: "error occurred",
+      error: error.message,
+    };
   }
-}
+};
 const frChartsCAS = async () => {
   try {
     const CASCharts = await JpiaFr.findAndCountAll({
-      where:{
-        department:"CAS",
-        status:"approved"
-      }
-    })
-    const score = CASCharts.count * 5
+      where: {
+        department: "CAS",
+        status: "approved",
+      },
+    });
+    const score = CASCharts.count * 5;
     console.log(score);
     return {
-      message:`CAS raw count ${CASCharts}`,
-      data:score
-    }
+      message: `CAS raw count ${CASCharts}`,
+      data: score,
+    };
   } catch (error) {
     return {
-      message:"error occurred",
-      error:error.message
-    }
+      message: "error occurred",
+      error: error.message,
+    };
   }
-}
+};
 const frChartsCHK = async () => {
   try {
     const CHKCharts = await JpiaFr.findAndCountAll({
-      where:{
-        department:"CHK",
-        status:"approved"
-      }
-    })
-    const score = CHKCharts.count * 5
+      where: {
+        department: "CHK",
+        status: "approved",
+      },
+    });
+    const score = CHKCharts.count * 5;
     console.log(score);
     return {
-      message:`CHK raw count ${CHKCharts}`,
-      data:score
-    }
+      message: `CHK raw count ${CHKCharts}`,
+      data: score,
+    };
   } catch (error) {
     return {
-      message:"error occurred",
-      error:error.message
-    }
+      message: "error occurred",
+      error: error.message,
+    };
   }
-}
+};
 const frChartsCOE = async () => {
   try {
     const COECharts = await JpiaFr.findAndCountAll({
-      where:{
-        department:"COE",
-        status:"approved"
-      }
-    })
-    const score = COECharts.count * 5
+      where: {
+        department: "COE",
+        status: "approved",
+      },
+    });
+    const score = COECharts.count * 5;
     console.log(score);
     return {
-      message:`COE raw count ${COECharts}`,
-      data:score
-    }
+      message: `COE raw count ${COECharts}`,
+      data: score,
+    };
   } catch (error) {
     return {
-      message:"error occurred",
-      error:error.message
-    }
+      message: "error occurred",
+      error: error.message,
+    };
   }
-}
+};
 const frChartsCOA = async () => {
   try {
     const COACharts = await JpiaFr.findAndCountAll({
-      where:{
-        department:"COA",
-        status:"approved"
-      }
-    })
-    const score = COACharts.count * 5
+      where: {
+        department: "COA",
+        status: "approved",
+      },
+    });
+    const score = COACharts.count * 5;
     console.log(score);
     return {
-      message:`COA raw count ${COACharts}`,
-      data:score
-    }
+      message: `COA raw count ${COACharts}`,
+      data: score,
+    };
   } catch (error) {
     return {
-      message:"error occurred",
-      error:error.message
-    }
+      message: "error occurred",
+      error: error.message,
+    };
   }
-}
+};
 const frChartsCNHS = async () => {
   try {
     const CNHSCharts = await JpiaFr.findAndCountAll({
-      where:{
-        department:"CNHS",
-        status:"approved"
-      }
-    })
-    const score = CNHSCharts.count * 5
+      where: {
+        department: "CNHS",
+        status: "approved",
+      },
+    });
+    const score = CNHSCharts.count * 5;
     console.log(score);
     return {
-      message:`CNHS raw count ${CNHSCharts}`,
-      data:score
-    }
+      message: `CNHS raw count ${CNHSCharts}`,
+      data: score,
+    };
   } catch (error) {
     return {
-      message:"error occurred",
-      error:error.message
-    }
+      message: "error occurred",
+      error: error.message,
+    };
   }
-}
+};
 module.exports = {
   fetchAdmin,
   fetchUser,
@@ -310,5 +310,5 @@ module.exports = {
   frChartsCOA,
   frChartsCOE,
   frChartsCTED,
-  frChartsCTHM
+  frChartsCTHM,
 };

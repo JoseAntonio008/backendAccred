@@ -7,6 +7,7 @@ const fetchNotifications = async ({ department }) => {
       where: {
         department: { [Op.in]: department },
       },
+      order: [["createdAt", "DESC"]],
     });
     if (getNotif.length === 0) {
       return {
