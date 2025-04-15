@@ -9,11 +9,21 @@ const notifRouter = express.Router();
 
 notifRouter.get("/fetch", async (req, res) => {
   try {
-    const { body } = req;
-    const results = await fetchNotifications(body);
-    if (results.message == "error occured") throw new Error(results.error);
+    let { department } = req.query;
+    
+    // Ensure department is an array
+    if (!Array.isArray(department)) {
+      department = [department];
+    }
+
+    console.log("Normalized department:", department);
+
+    const results = await fetchNotifications({ department });
+
+    if (results.message === "error occured") throw new Error(results.error);
+
     return res.status(200).json({
-      message: "success",
+      message: results.message,
       data: results.data,
     });
   } catch (error) {
@@ -23,6 +33,8 @@ notifRouter.get("/fetch", async (req, res) => {
     });
   }
 });
+
+
 notifRouter.delete("/delete-notif", async (req, res) => {
   try {
     const { body } = req;
